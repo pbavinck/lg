@@ -55,22 +55,12 @@ func Print(tag int, s string, args ...interface{}) error {
 	t, ok := tags[tag]
 	if !ok {
 		return fmt.Errorf("Unknown tag")
-		// t = &aLogTag{
-		// 	name:    "",
-		// 	enabled: true,
-		// 	level:   InfoLevel,
-		// }
-
 	}
 	grpString := "%+" + strconv.Itoa(groupLenMax) + "v"
 	tagString := grpString + "-%-" + strconv.Itoa(tagLenMax) + "v"
-	if (!ok && enabled) || (ok && t.enabled && t.level >= logLevel) {
+	if ok && enabled && t.enabled && t.level >= logLevel {
 		s = fmt.Sprintf(s, args...)
-		if t.name == "" {
-			log.Printf("%+7v["+grpString+"]: %v", levelMap[t.level], t.group, s)
-		} else {
-			log.Printf("%+7v["+tagString+"]: %v", levelMap[t.level], t.group, t.name, s)
-		}
+		log.Printf("%+7v["+tagString+"]: %v", levelMap[t.level], t.group, t.name, s)
 	}
 	return nil
 }
